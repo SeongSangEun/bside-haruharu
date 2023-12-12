@@ -1,0 +1,59 @@
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: debug
+spring:
+  profiles:
+    include: oauth2
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://49.50.163.111:3306/haruharu?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: root
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
+app:
+  auth:
+    tokenSecret: sangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeun
+    accessTokenExpirationMsec: 1800000
+    refreshTokenExpirationMsec: 604800000
+  cors:
+    allowedOrigins: http://localhost:3000, http://localhost:8080
+  oauth2:
+    authorizedRedirectUris: http://localhost:3000/oauth2/redirect
+
+server:
+  error:
+    include-exception: true
+    include-stacktrace: always
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: swagger
+    tryItOutEnabled: true
+    filter: true
+    operationsSorter: method
+    displayRequestDuration: true
+    supportedSubmitMethods: ["get", "put", "post"]
+
+clova:
+  url: https://clovastudio.apigw.ntruss.com/testapp/v1/completions/LK-D2
+  X-NCP-CLOVASTUDIO-API-KEY: NTA0MjU2MWZlZTcxNDJiY/75LnD6uPTWDKgAOALQt47E1SAtQmB8rNhS6hzitV1I0PZgeTCmcygvUkD2fZ8i3BTHyGEeUOumNTeyhnx6pK4Od2HbGCxIFUrSAUF2sKAk6iO7ObdqAsjXfAq+doUX60LJ+2t0ZUjAK72nyQgalG0Kbp9n33FNxNEoiheZj5p/OXHgkf0uIKERSJIqOm7g9phHJ6gJUivTFpJbrXYVupg=
+  X-NCP-APIGW-API-KEY: IHQD7VJfELEyMar7N2Q3Lk29CvgDcQBtLabO87bM
+  X-NCP-CLOVASTUDIO-REQUEST-ID: 4935e5409f3c4d8ba5678a3ee308578b
+
