@@ -11,13 +11,9 @@ import java.util.List;
 public class CreateArticleRequest {
 
     @Schema( type = "long", example = "long", description="컨셉 번호를 입력해주세요.")
-    @NotBlank
-    @NotNull
     private Long conceptSeq;
 
     @Schema( type = "string", example = "원본 메시지", description="원본 메시지 입니다.")
-    @NotBlank
-    @NotNull
     private String inputMessage;
 
     @Schema( type = "string", example = "이미지 URL", description="이미지 저장 API 호출후 응답받은 url 을 입력해주세요.")

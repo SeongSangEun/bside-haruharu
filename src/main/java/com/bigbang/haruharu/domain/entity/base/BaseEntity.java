@@ -23,7 +23,7 @@ public abstract class BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Setter
-    private YN deleteYn;
+    private YN deleteYn = YN.N;
 
     public static enum YN {
         Y, N;

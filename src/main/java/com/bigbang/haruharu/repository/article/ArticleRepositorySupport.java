@@ -8,7 +8,9 @@ import com.bigbang.haruharu.domain.entity.like.QLike;
 import com.bigbang.haruharu.dto.entityDto.ArticleDto;
 import com.bigbang.haruharu.dto.entityDto.ConceptDto;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.eclipse.jdt.internal.compiler.ast.Expression;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
@@ -31,6 +33,7 @@ public class ArticleRepositorySupport extends QuerydslRepositorySupport {
     public Like existLike(Long articleSeq, Long userSeq) {
         return queryFactory.selectFrom(like)
                 .join(like.article, article)
+                .fetchJoin()
                 .where(article.articleSeq.eq(articleSeq),
                         like.userSeq.eq(userSeq))
                 .fetchFirst();
@@ -55,15 +58,23 @@ public class ArticleRepositorySupport extends QuerydslRepositorySupport {
                                 article.convertedText,
                                 article.imageUrl,
                                 article.likeCount,
-                                concept.name
+                                concept.name,
+                                new CaseBuilder()
+                                        .when(like.isNotNull())
+                                        .then(true)
+                                        .otherwise(false),
+                                article.createdDate
                         )
                 ).from(article)
                 .join(concept).on(article.conceptSeq.eq(concept.conceptSeq))
+                .leftJoin(article.likeList, like)
+                .on(like.deleteYn.eq(BaseEntity.YN.N), like.userSeq.eq(userSeq))
                 .where(article.deleteYn.eq(BaseEntity.YN.N),
-                        article.userSeq.eq(userSeq))
+                        article.userSeq.eq(userSeq)
+                        )
                 .fetch();
     }
-    public List<ArticleDto> getRandomArticles() {
+    public List<ArticleDto> getRandomArticles(Long userSeq) {
         return queryFactory.select(
                         Projections.constructor(
                                 ArticleDto.class,
@@ -73,10 +84,17 @@ public class ArticleRepositorySupport extends QuerydslRepositorySupport {
                                 article.convertedText,
                                 article.imageUrl,
                                 article.likeCount,
-                                concept.name
+                                concept.name,
+                                new CaseBuilder()
+                                        .when(like.isNotNull())
+                                        .then(true)
+                                        .otherwise(false),
+                                article.createdDate
                         )
                 ).from(article)
                 .join(concept).on(article.conceptSeq.eq(concept.conceptSeq))
+                .leftJoin(article.likeList, like)
+                .on(like.deleteYn.eq(BaseEntity.YN.N), like.userSeq.eq(userSeq))
                 .where(article.deleteYn.eq(BaseEntity.YN.N))
                 .fetch();
     }

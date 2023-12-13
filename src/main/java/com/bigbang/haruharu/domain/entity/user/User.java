@@ -63,4 +63,5 @@ public class User extends BaseEntity {
         this.imageUrl = imageUrl;
     }
     public void resetDailyCount() {this.dailyCount = 5;}
+    public void minusDailyCount() {this.dailyCount --;}
 }

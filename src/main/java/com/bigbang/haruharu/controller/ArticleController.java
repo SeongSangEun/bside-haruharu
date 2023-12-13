@@ -59,6 +59,7 @@ public class ArticleController {
         return conceptService.findConceptList();
     }
 
+    @Operation(summary = "좋아요 상태를 변경합니다.", description = "좋아요 상태를 변경합니다.")
     @PutMapping("/like/{articleSeq}")
     public ResponseEntity<?> changeLikeStatusArticle(
             @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,

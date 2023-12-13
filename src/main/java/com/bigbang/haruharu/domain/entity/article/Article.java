@@ -1,9 +1,9 @@
 package com.bigbang.haruharu.domain.entity.article;
 
 import com.bigbang.haruharu.domain.entity.base.BaseEntity;
-import com.bigbang.haruharu.domain.entity.concept.Concept;
 import com.bigbang.haruharu.domain.entity.like.Like;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicUpdate
 public class Article extends BaseEntity {
 
     @Id
@@ -35,15 +36,11 @@ public class Article extends BaseEntity {
     private List<Like> likeList;
     private Long userSeq;
 
-    public void newLikeArticle(Like newLike) {
-        this.likeList.add(newLike);
+    public void likeArticle() {
         this.likeCount ++;
     }
     public void unlikeArticle() {
         this.likeCount --;
-    }
-    public void reLikeArticle() {
-        this.likeCount ++;
     }
     public void deleteArticle() {
         this.subject = "삭제";

@@ -6,15 +6,15 @@ import com.bigbang.haruharu.config.security.token.UserPrincipal;
 import com.bigbang.haruharu.domain.entity.article.Article;
 import com.bigbang.haruharu.domain.entity.base.BaseEntity;
 import com.bigbang.haruharu.domain.entity.like.Like;
+import com.bigbang.haruharu.domain.entity.user.User;
 import com.bigbang.haruharu.dto.entityDto.ArticleDto;
-import com.bigbang.haruharu.dto.entityDto.ConceptDto;
 import com.bigbang.haruharu.dto.request.article.CreateArticleRequest;
 import com.bigbang.haruharu.dto.response.ApiResponse;
 import com.bigbang.haruharu.dto.response.ArticleResponse;
-import com.bigbang.haruharu.dto.response.ConceptResponse;
 import com.bigbang.haruharu.repository.article.ArticleRepository;
 import com.bigbang.haruharu.repository.article.ArticleRepositorySupport;
 import com.bigbang.haruharu.repository.like.LikeRepository;
+import com.bigbang.haruharu.repository.user.UserRepository;
 import com.bigbang.haruharu.service.clova.ClovaApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,12 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleRepositorySupport articleRepositorySupport;
     private final LikeRepository likeRepository;
+    private final UserRepository userRepository;
     public ResponseEntity<?> createArticle(CreateArticleRequest createArticleRequest, Long userSeq) {
+
+        //todo dailyCount에 따른 생성횟수 제한
+        //todo 하루 글 생성갯수 제한 -> 이미 가지고 있는 글이 있다면 등록안되게끔
+
 
         //todo conceptId에 따른 컨셉별 callClovaApi 호출 서비스 다양화
         //todo 제목 어떻게 할건지 정해지면 호출 서비스 혹은 기입
@@ -49,6 +54,10 @@ public class ArticleService {
                 .conceptSeq(createArticleRequest.getConceptSeq())
                 .build();
 
+        User user = userRepository.findById(userSeq).get();
+        user.minusDailyCount();
+
+        userRepository.save(user);
         articleRepository.save(article);
 
         return ResponseEntity.ok(ApiResponse.builder().check(true).information("저장에 성공하였습니다.").build());
@@ -72,7 +81,7 @@ public class ArticleService {
         Like like = articleRepositorySupport.existLike(articleSeq, userSeq);
 
         if(ObjectUtils.isEmpty(like)) {
-            createNewLike(userSeq, like);
+            like = createNewLike(userSeq, articleSeq);
         } else {
             //기존 삭제되어있던 데이터는 삭제해제 및 카운트 증가
             if(BaseEntity.YN.Y.equals(like.getDeleteYn())) {
@@ -97,31 +106,35 @@ public class ArticleService {
         return ResponseEntity.ok(response);
     }
     public ResponseEntity<?> getRandomArticles(UserPrincipal userPrincipal) {
-        List<ArticleDto> myArticles = articleRepositorySupport.getMyArticles(userPrincipal.getId());
+        List<ArticleDto> randomArticles = articleRepositorySupport.getRandomArticles(userPrincipal.getId());
 
         ApiResponse response = ApiResponse.builder()
                 .check(true)
-                .information(new ArticleResponse(myArticles))
+                .information(new ArticleResponse(randomArticles))
                 .build();
 
         return ResponseEntity.ok(response);
     }
 
-    private static void unLikeArticle(Like like) {
+    private void unLikeArticle(Like like) {
         like.setDeleteYn(BaseEntity.YN.Y);
         like.getArticle().unlikeArticle();
+        articleRepository.save(like.getArticle());
     }
 
-    private static void reLikeArticle(Like like) {
+    private void reLikeArticle(Like like) {
         like.setDeleteYn(BaseEntity.YN.N);
-        like.getArticle().reLikeArticle();
+        like.getArticle().likeArticle();
+        articleRepository.save(like.getArticle());
     }
 
-    private static void createNewLike(Long userSeq, Like like) {
-        Like newLike = Like.builder()
+    private Like createNewLike(Long userSeq, Long articleSeq) {
+        Article article = articleRepository.findById(articleSeq).orElseThrow(
+                () -> new DefaultException(ErrorCode.INVALID_ARTICLE));
+        article.likeArticle();
+        return Like.builder()
                 .userSeq(userSeq)
-                .article(like.getArticle())
+                .article(article)
                 .build();
-        like.getArticle().newLikeArticle(newLike);
     }
 }
