@@ -45,4 +45,12 @@ public class Article extends BaseEntity {
     public void reLikeArticle() {
         this.likeCount ++;
     }
+    public void deleteArticle() {
+        this.subject = "삭제";
+        this.originText = "삭제";
+        this.convertedText = "삭제";
+        this.imageUrl = "삭제";
+        this.likeCount = 0;
+        this.setDeleteYn(YN.Y);
+    }
 }

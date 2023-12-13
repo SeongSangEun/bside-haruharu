@@ -11,9 +11,9 @@ import com.bigbang.haruharu.dto.request.auth.SignInRequest;
 import com.bigbang.haruharu.dto.request.auth.SignUpRequest;
 import com.bigbang.haruharu.dto.response.AuthResponse;
 import com.bigbang.haruharu.dto.response.Message;
-import com.bigbang.haruharu.dto.response.clova.ClovaResponseDto;
 import com.bigbang.haruharu.service.auth.AuthService;
 import com.bigbang.haruharu.service.clova.ClovaApiService;
+import com.bigbang.haruharu.service.s3.UploadService;
 import com.bigbang.haruharu.util.JsonUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,8 +25,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Tag(name = "Authorization", description = "Authorization API")
 @RequiredArgsConstructor
@@ -37,6 +39,7 @@ public class AuthController {
     private final AuthService authService;
     private final ClovaApiService clovaApiService;
     private final JsonUtils jsonUtils;
+    private final UploadService uploadService;
 
     @Operation(summary = "유저 정보 확인", description = "현제 접속된 유저정보를 확인합니다.")
     @ApiResponses(value = {
@@ -124,5 +127,4 @@ public class AuthController {
     ) {
         return authService.signout(tokenRefreshRequest);
     }
-
 }

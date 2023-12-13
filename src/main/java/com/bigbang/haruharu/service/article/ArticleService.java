@@ -1,10 +1,17 @@
 package com.bigbang.haruharu.service.article;
 
+import com.bigbang.haruharu.advice.error.DefaultException;
+import com.bigbang.haruharu.advice.payload.ErrorCode;
+import com.bigbang.haruharu.config.security.token.UserPrincipal;
 import com.bigbang.haruharu.domain.entity.article.Article;
 import com.bigbang.haruharu.domain.entity.base.BaseEntity;
 import com.bigbang.haruharu.domain.entity.like.Like;
+import com.bigbang.haruharu.dto.entityDto.ArticleDto;
+import com.bigbang.haruharu.dto.entityDto.ConceptDto;
 import com.bigbang.haruharu.dto.request.article.CreateArticleRequest;
 import com.bigbang.haruharu.dto.response.ApiResponse;
+import com.bigbang.haruharu.dto.response.ArticleResponse;
+import com.bigbang.haruharu.dto.response.ConceptResponse;
 import com.bigbang.haruharu.repository.article.ArticleRepository;
 import com.bigbang.haruharu.repository.article.ArticleRepositorySupport;
 import com.bigbang.haruharu.repository.like.LikeRepository;
@@ -13,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +37,6 @@ public class ArticleService {
         //todo 제목 어떻게 할건지 정해지면 호출 서비스 혹은 기입
         String convertedText = clovaApiService.callClovaApi(createArticleRequest.getInputMessage());
         String subject = clovaApiService.callClovaApi(createArticleRequest.getInputMessage());
-
 
         Article article = Article.builder()
                 .userSeq(userSeq)
@@ -46,7 +54,21 @@ public class ArticleService {
         return ResponseEntity.ok(ApiResponse.builder().check(true).information("저장에 성공하였습니다.").build());
     }
 
-    public void changeLikeArticle(Long articleSeq, Long userSeq) {
+    public ResponseEntity<?> deleteArticle(Long articleSeq, Long userSeq) {
+
+        Article article = articleRepositorySupport.findByUserSeqAndArticleSeq(userSeq, articleSeq);
+
+        if(ObjectUtils.isEmpty(article)) {
+            throw new DefaultException(ErrorCode.INVALID_ARTICLE);
+        }
+
+        article.deleteArticle();
+        articleRepository.save(article);
+
+        return ResponseEntity.ok(ApiResponse.builder().check(true).information("저장에 성공하였습니다.").build());
+    }
+
+    public ResponseEntity<?> changeLikeArticle(Long articleSeq, Long userSeq) {
         Like like = articleRepositorySupport.existLike(articleSeq, userSeq);
 
         if(ObjectUtils.isEmpty(like)) {
@@ -60,6 +82,29 @@ public class ArticleService {
             }
         }
         likeRepository.save(like);
+
+        return ResponseEntity.ok(ApiResponse.builder().check(true).information("변경에 성공하였습니다.").build());
+    }
+
+    public ResponseEntity<?> getMyArticles(UserPrincipal userPrincipal) {
+        List<ArticleDto> myArticles = articleRepositorySupport.getMyArticles(userPrincipal.getId());
+
+        ApiResponse response = ApiResponse.builder()
+                .check(true)
+                .information(new ArticleResponse(myArticles))
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+    public ResponseEntity<?> getRandomArticles(UserPrincipal userPrincipal) {
+        List<ArticleDto> myArticles = articleRepositorySupport.getMyArticles(userPrincipal.getId());
+
+        ApiResponse response = ApiResponse.builder()
+                .check(true)
+                .information(new ArticleResponse(myArticles))
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     private static void unLikeArticle(Like like) {

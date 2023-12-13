@@ -57,3 +57,13 @@ clova:
   X-NCP-APIGW-API-KEY: IHQD7VJfELEyMar7N2Q3Lk29CvgDcQBtLabO87bM
   X-NCP-CLOVASTUDIO-REQUEST-ID: 4935e5409f3c4d8ba5678a3ee308578b
 
+cloud:
+  ncp:
+    credentials:
+      accessKey: RL1LdlB9p4zKGQJPeaZx
+      secretKey: roIritVwMj1II1EQza67HweDfoDHnALU5MDJd9CS
+    region: kr-standard
+    s3:
+      bucket:
+        name: haruharu
+        url: https://kr.object.ncloudstorage.com/haruharu
