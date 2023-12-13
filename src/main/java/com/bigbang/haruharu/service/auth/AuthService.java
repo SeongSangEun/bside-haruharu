@@ -88,26 +88,37 @@ public class AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Optional<Token> findToken = tokenRepository.findByUserEmail(signInRequest.getEmail());
-        String refreshToken = findToken.get().getRefreshToken();
-        TokenMapping tokenMapping;
+        Token searchToken = tokenRepository.findByUserEmail(signInRequest.getEmail()).orElse(null);
 
-        if(findToken.isPresent() && isNotExpireToken(new RefreshTokenRequest(refreshToken))) {
-            tokenMapping = customTokenProviderService.refreshAccessToken(authentication, refreshToken);
-        } else {
-            tokenMapping = customTokenProviderService.createToken(authentication);
-            Token token = Token.builder()
-                    .refreshToken(tokenMapping.getRefreshToken())
-                    .userEmail(tokenMapping.getUserEmail())
+        if(searchToken == null) {
+            TokenMapping token = customTokenProviderService.createToken(authentication);
+
+            AuthResponse authResponse = AuthResponse.builder()
+                    .accessToken(token.getAccessToken())
+                    .refreshToken(token.getRefreshToken())
                     .build();
-            tokenRepository.save(token);
+            return ResponseEntity.ok(authResponse);
+        } else {
+            String refreshToken = searchToken.getRefreshToken();
+            TokenMapping tokenMapping;
+
+            if(isNotExpireToken(new RefreshTokenRequest(refreshToken))) {
+                tokenMapping = customTokenProviderService.refreshAccessToken(authentication, refreshToken);
+            } else {
+                tokenMapping = customTokenProviderService.createToken(authentication);
+                Token token = Token.builder()
+                        .refreshToken(tokenMapping.getRefreshToken())
+                        .userEmail(tokenMapping.getUserEmail())
+                        .build();
+                tokenRepository.save(token);
+            }
+            AuthResponse authResponse = AuthResponse.builder()
+                    .accessToken(tokenMapping.getAccessToken())
+                    .refreshToken(tokenMapping.getRefreshToken())
+                    .build();
+
+            return ResponseEntity.ok(authResponse);
         }
-        AuthResponse authResponse = AuthResponse.builder()
-                .accessToken(tokenMapping.getAccessToken())
-                .refreshToken(tokenMapping.getRefreshToken())
-                .build();
-        
-        return ResponseEntity.ok(authResponse);
     }
 
     public ResponseEntity<?> signup(SignUpRequest signUpRequest){
@@ -118,7 +129,8 @@ public class AuthService {
                         .email(signUpRequest.getEmail())
                         .password(passwordEncoder.encode(signUpRequest.getPassword()))
                         .provider(Provider.local)
-                        .role(Role.ADMIN)
+                        .dailyCount(5)
+                        .role(Role.USER)
                         .build();
 
         userRepository.save(user);
