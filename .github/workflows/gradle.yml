@@ -31,11 +31,11 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     # Secret YML 파일 생성
-    - name: Set YML
-      run: |
-        mkdir -p src/main/resources
-        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
-        find src
+#    - name: Set YML
+#      run: |
+#        mkdir -p src/main/resources
+#        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+#        find src
 
     # Gradle 권한 부여
     - name: Grant permission for gradlew
