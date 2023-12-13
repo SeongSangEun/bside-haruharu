@@ -11,9 +11,9 @@ spring:
       enabled: always
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://49.50.163.111:3306/haruharu?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: root
+    url: ${{ secrets.DB_MYSQL_URI }}
+    username: ${{ secrets.DB_MYSQL_USERNAME }}
+    password: ${{ secrets.DB_MYSQL_PASSWORD }}
   jpa:
     properties:
       hibernate:
@@ -28,17 +28,17 @@ spring:
       client:
         registration:
           naver:
-            client-id: R3CKfkBKtVY6ajw8kJV6
-            client-secret: W9T78S4aBy
-            redirect-uri: http://localhost:8080/oauth2/callback/naver
+            client-id: ${{ secrets.NAVER_CLIENT_ID }}
+            client-secret: ${{ secrets.NAVER_CLIENT_SECRET }}
+            redirect-uri: ${{ secrets.NAVER_REDIRECT_URI }}
             client-authentication-method: post
             authorization-grant-type: authorization_code
             scope: nickname,email,profile_image
             client-name: Naver
           kakao:
-            client-id: c26e0a8f2821ce1903247ac3c1f6a5e7
-            client-secret: UAxzzr7hEzJa4QuGRldWS58j6tTuIag6
-            redirect-uri: http://localhost:8080/oauth2/callback/kakao
+            client-id: ${{ secrets.KAKAO_CLIENT_ID }}
+            client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
+            redirect-uri: ${{ secrets.KAKAO_REDIRECT_URI }}
             client-authentication-method: post
             authorization-grant-type: authorization_code
             scope: profile_nickname,profile_image,account_email
@@ -57,13 +57,13 @@ spring:
 
 app:
   auth:
-    tokenSecret: sangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeunsangeun
+    tokenSecret: ${{ secrets.JWT_TOKEN_SECRET }}
     accessTokenExpirationMsec: 1800000
     refreshTokenExpirationMsec: 604800000
   cors:
-    allowedOrigins: http://localhost:3000, http://localhost:8080
+    allowedOrigins: ${{ secrets.CORS_ALLOWED_ORIGINS }}
   oauth2:
-    authorizedRedirectUris: http://localhost:3000/oauth2/redirect
+    authorizedRedirectUris: ${{ secrets.OAUTH2_REDIRECT_URIS }}
 
 server:
   error:
@@ -82,15 +82,15 @@ springdoc:
 
 clova:
   url: https://clovastudio.apigw.ntruss.com/testapp/v1/completions/LK-D2
-  X-NCP-CLOVASTUDIO-API-KEY: NTA0MjU2MWZlZTcxNDJiY/75LnD6uPTWDKgAOALQt47E1SAtQmB8rNhS6hzitV1I0PZgeTCmcygvUkD2fZ8i3BTHyGEeUOumNTeyhnx6pK4Od2HbGCxIFUrSAUF2sKAk6iO7ObdqAsjXfAq+doUX60LJ+2t0ZUjAK72nyQgalG0Kbp9n33FNxNEoiheZj5p/OXHgkf0uIKERSJIqOm7g9phHJ6gJUivTFpJbrXYVupg=
-  X-NCP-APIGW-API-KEY: IHQD7VJfELEyMar7N2Q3Lk29CvgDcQBtLabO87bM
-  X-NCP-CLOVASTUDIO-REQUEST-ID: 4935e5409f3c4d8ba5678a3ee308578b
+  X-NCP-CLOVASTUDIO-API-KEY: ${{ secrets.NCP_CLOVASTUDIO_API_KEY }}
+  X-NCP-APIGW-API-KEY: ${{ secrets.NCP_APIGW_API_KEY }}
+  X-NCP-CLOVASTUDIO-REQUEST-ID: ${{ secrets.NCP_CLOVASTUDIO_REQUEST_ID }}
 
 cloud:
   ncp:
     credentials:
-      accessKey: RL1LdlB9p4zKGQJPeaZx
-      secretKey: roIritVwMj1II1EQza67HweDfoDHnALU5MDJd9CS
+      accessKey: ${{ secrets.NCP_S3_ACCESS_KEY }}
+      secretKey: ${{ secrets.NCP_S3_SECRET_KEY }}
     region: kr-standard
     s3:
       bucket:
