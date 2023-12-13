@@ -32,7 +32,7 @@ jobs:
 
     # Docker 이미지 Build (3)
     - name: docker image build
-      run: docker build -t sangeunrepo/bside-haruharu .
+      run: docker build -t sangeunrepo/haruharu .
 
     # Docker Hub push (4)
     - name: docker Hub push
