@@ -19,6 +19,6 @@ public class CreateArticleRequest {
     @Schema( type = "string", example = "이미지 URL", description="이미지 저장 API 호출후 응답받은 url 을 입력해주세요.")
     private String imageUrl;
 //    private String subject;
-    @Schema( type = "[string, string]", example = "해쉬태그 리스트", description="입력받은 해쉬태그 리스트를 입력해주세요.")
-    private List<String> hashTagList;
+//    @Schema( type = "[string, string]", example = "해쉬태그 리스트", description="입력받은 해쉬태그 리스트를 입력해주세요.")
+//    private List<String> hashTagList;
 }
