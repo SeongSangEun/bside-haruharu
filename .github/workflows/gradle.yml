@@ -12,7 +12,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  deploy: 
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,3 +37,26 @@ jobs:
     # Docker Hub push (4)
     - name: docker Hub push
       run: docker push sangeunrepo/haruharu
+
+  deploy:
+    # needs를 통해 build job이 수행 성공시에 작업되도록 설정
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      # NCP 로그인 / docker image pull & run
+      - name: NCP login and docker image pull and run
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.NCP_HOST }}
+          username: ${{ secrets.NCP_USERNAME }}
+          password: ${{ secrets.NCP_PASSWORD }}
+          port: ${{ secrets.NCP_PORT }}
+          script: |
+            sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+#            sudo docker stop $(sudo docker ps -a -q)
+#            sudo docker rm -f $(sudo docker ps -a -q)
+            sudo docker pull sangeunrepo/haruharu
+            sudo docker run -d -p 8080:8080 sangeunrepo/haruharu
+#            sudo docker image prune -f
+            ps -ef | grep
