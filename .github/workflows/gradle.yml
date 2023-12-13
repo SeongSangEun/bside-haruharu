@@ -19,9 +19,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     
-    # Spring Boot 어플리케이션 Build (1)
-    - name: Spring Boot Build
-      run: ./gradlew clean build --exclude-task test
+#    # Spring Boot 어플리케이션 Build (1)
+#    - name: Spring Boot Build
+#      run: ./gradlew clean build --exclude-task test
     
     # DockerHub Login (2)
     - name: docker login
@@ -30,20 +30,20 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Secret YML 파일 생성
+    # Secret YML 파일 생성
     - name: Set YML
       run: |
         mkdir -p src/main/resources
         echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
         find src
 
-        # Gradle 권한 부여
+    # Gradle 권한 부여
     - name: Grant permission for gradlew
       run: chmod +x ./gradlew
-        # Test 없이 빌드
+    # Test 없이 빌드
     - name: Build with Gradle
       run: ./gradlew clean build -x test
-        #빌드한 jar 파일을 도커 이미지로 빌드하고 도커 허브에 푸시
+    #빌드한 jar 파일을 도커 이미지로 빌드하고 도커 허브에 푸시
     - name: web docker build and push
       run: |
          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
