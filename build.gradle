@@ -28,8 +28,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.apache.httpcomponents:httpclient:4.5'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.296'
 
     implementation 'org.apache.poi:poi:5.2.0'
 

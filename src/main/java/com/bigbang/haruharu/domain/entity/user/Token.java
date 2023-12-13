@@ -3,6 +3,7 @@ package com.bigbang.haruharu.domain.entity.user;
 import com.bigbang.haruharu.domain.entity.base.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.Table;
 @Getter
 @Table(name="token")
 @Entity
+@DynamicUpdate
 public class Token extends BaseEntity {
 
     @Id
