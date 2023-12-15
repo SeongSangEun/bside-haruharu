@@ -43,7 +43,7 @@ public class ArticleController {
     }
 
     @Operation(summary = "글 제목 수정", description = "글 제목 수정 api 입니다.")
-    @PutMapping
+    @PutMapping("/subject")
     public ResponseEntity<?> changeArticleSubject(
             @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "ArticleSeq를 입력해주세요.", required = true) @PathVariable(name = "articleSeq") Long articleSeq,
