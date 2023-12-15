@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -72,6 +73,21 @@ public class ArticleService {
         }
 
         article.deleteArticle();
+        articleRepository.save(article);
+
+        return ResponseEntity.ok(ApiResponse.builder().check(true).information("저장에 성공하였습니다.").build());
+    }
+    public ResponseEntity<?> changeArticleSubject(Long articleSeq, Long userSeq, String changedSubject) {
+        Article article = articleRepositorySupport.findByUserSeqAndArticleSeq(userSeq, articleSeq);
+
+        if(ObjectUtils.isEmpty(article)) {
+            throw new DefaultException(ErrorCode.INVALID_ARTICLE);
+        }
+        String subject = StringUtils.hasText(changedSubject)
+                ? changedSubject
+                : "";
+
+        article.updateSubject(subject);
         articleRepository.save(article);
 
         return ResponseEntity.ok(ApiResponse.builder().check(true).information("저장에 성공하였습니다.").build());

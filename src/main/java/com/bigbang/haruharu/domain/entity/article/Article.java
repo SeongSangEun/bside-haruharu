@@ -50,4 +50,7 @@ public class Article extends BaseEntity {
         this.likeCount = 0;
         this.setDeleteYn(YN.Y);
     }
+    public void updateSubject(String changedSubject) {
+        this.subject = changedSubject;
+    }
 }

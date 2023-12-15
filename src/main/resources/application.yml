@@ -30,7 +30,7 @@ spring:
           naver:
             client-id: R3CKfkBKtVY6ajw8kJV6
             client-secret: W9T78S4aBy
-            redirect-uri: http://localhost:8080/oauth2/callback/naver
+            redirect-uri: http://http://49.50.163.111/:8080/oauth2/callback/naver
             client-authentication-method: post
             authorization-grant-type: authorization_code
             scope: nickname,email,profile_image
@@ -38,7 +38,7 @@ spring:
           kakao:
             client-id: c26e0a8f2821ce1903247ac3c1f6a5e7
             client-secret: UAxzzr7hEzJa4QuGRldWS58j6tTuIag6
-            redirect-uri: http://localhost:8080/oauth2/callback/kakao
+            redirect-uri: http://http://49.50.163.111/:8080/oauth2/callback/kakao
             client-authentication-method: post
             authorization-grant-type: authorization_code
             scope: profile_nickname,profile_image,account_email
@@ -61,9 +61,9 @@ app:
     accessTokenExpirationMsec: 1800000
     refreshTokenExpirationMsec: 604800000
   cors:
-    allowedOrigins: http://localhost:3000, http://localhost:8080
+    allowedOrigins: http://http://49.50.163.111/:3000, http://http://49.50.163.111/:8080
   oauth2:
-    authorizedRedirectUris: http://localhost:3000/oauth2/redirect
+    authorizedRedirectUris: http://http://49.50.163.111/:3000/oauth2/redirect
 
 server:
   error:

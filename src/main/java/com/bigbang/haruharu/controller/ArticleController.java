@@ -42,6 +42,16 @@ public class ArticleController {
         return articleService.deleteArticle(articleSeq, userPrincipal.getId());
     }
 
+    @Operation(summary = "글 제목 수정", description = "글 제목 수정 api 입니다.")
+    @PutMapping
+    public ResponseEntity<?> changeArticleSubject(
+            @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
+            @Parameter(description = "ArticleSeq를 입력해주세요.", required = true) @PathVariable(name = "articleSeq") Long articleSeq,
+            @Parameter(description = "업데이트 될 제목을 입력해주세요.") @RequestParam String subject
+    ) {
+        return articleService.changeArticleSubject(articleSeq, userPrincipal.getId(), subject);
+    }
+
     @Operation(summary = "이미지 저장", description = "이미지 저장 후 url 발급, 글 저장시 imageUrl부분에 해당 url 기입")
     @GetMapping("/upload/image")
     public ResponseEntity<?> uploadImageFile(
