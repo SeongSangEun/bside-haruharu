@@ -49,6 +49,8 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java:8.0.28'
     annotationProcessor 'org.projectlombok:lombok'
 
+    implementation 'org.redisson:redisson-spring-boot-starter:3.16.8'
+
     implementation 'com.google.code.gson:gson:2.9.0'
 
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"

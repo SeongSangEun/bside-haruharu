@@ -16,6 +16,7 @@ import com.bigbang.haruharu.repository.article.ArticleRepositorySupport;
 import com.bigbang.haruharu.repository.like.LikeRepository;
 import com.bigbang.haruharu.repository.user.UserRepository;
 import com.bigbang.haruharu.service.clova.ClovaApiService;
+import com.bigbang.haruharu.util.DistributeLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -93,7 +94,8 @@ public class ArticleService {
         return ResponseEntity.ok(ApiResponse.builder().check(true).information("저장에 성공하였습니다.").build());
     }
 
-    public ResponseEntity<?> changeLikeArticle(Long articleSeq, Long userSeq) {
+    @DistributeLock(key = "#key", waitTime = 10L, leaseTime = 8L)
+    public ResponseEntity<?> changeLikeArticle(String key, Long articleSeq, Long userSeq) {
         Like like = articleRepositorySupport.existLike(articleSeq, userSeq);
 
         if(ObjectUtils.isEmpty(like)) {

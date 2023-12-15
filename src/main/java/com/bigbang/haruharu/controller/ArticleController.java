@@ -75,7 +75,9 @@ public class ArticleController {
             @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "ArticleSeq를 입력해주세요.", required = true) @PathVariable(name = "articleSeq") Long articleSeq
     ) {
-        return articleService.changeLikeArticle(articleSeq, userPrincipal.getId());
+
+        String key = "ARTICLE_" + articleSeq;
+        return articleService.changeLikeArticle(key, articleSeq, userPrincipal.getId());
     }
 
     @Operation(summary = "내가 쓴 삭제되지 않은 글들을 가져옵니다.", description = "삭제되지 않은 내가 쓴 글 불러오기")
