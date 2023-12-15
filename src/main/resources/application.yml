@@ -24,7 +24,7 @@ spring:
       ddl-auto: none
     open-in-view: false
   redis:
-    host: 49.50.163.111
+    host: localhost
     port: 6379
   security:
     oauth2:

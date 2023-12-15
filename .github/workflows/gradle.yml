@@ -78,4 +78,3 @@ jobs:
             sudo docker container remove haruharu
             sudo docker pull sangeunrepo/haruharu
             sudo docker run -d --name haruharu -p 8080:8080 sangeunrepo/haruharu
-            ps -ef | grep
