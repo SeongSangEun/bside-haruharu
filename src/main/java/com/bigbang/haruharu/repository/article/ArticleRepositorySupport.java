@@ -67,7 +67,8 @@ public class ArticleRepositorySupport extends QuerydslRepositorySupport {
                                         .when(like.isNotNull())
                                         .then(true)
                                         .otherwise(false),
-                                article.createdDate
+                                article.createdDate,
+                                article.hashTagSet
                         )
                 ).from(article)
                 .join(concept).on(article.conceptSeq.eq(concept.conceptSeq))
@@ -93,7 +94,8 @@ public class ArticleRepositorySupport extends QuerydslRepositorySupport {
                                         .when(like.isNotNull())
                                         .then(true)
                                         .otherwise(false),
-                                article.createdDate
+                                article.createdDate,
+                                article.hashTagSet
                         )
                 ).from(article)
                 .join(concept).on(article.conceptSeq.eq(concept.conceptSeq))

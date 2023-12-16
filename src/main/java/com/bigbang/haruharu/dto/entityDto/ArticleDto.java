@@ -19,8 +19,9 @@ public class ArticleDto {
     private String conceptName;
     private boolean isPostLiked;
     private LocalDate createdDate;
+    private String hashTags;
 
-    public ArticleDto(Long articleSeq, String subject, String originText, String convertedText, String imageUrl, Integer likeCount, String conceptName, boolean isPostLiked, LocalDateTime createdDate) {
+    public ArticleDto(Long articleSeq, String subject, String originText, String convertedText, String imageUrl, Integer likeCount, String conceptName, boolean isPostLiked, LocalDateTime createdDate, String hashTags) {
         this.articleSeq = articleSeq;
         this.subject = subject;
         this.originText = originText;
@@ -30,5 +31,6 @@ public class ArticleDto {
         this.conceptName = conceptName;
         this.isPostLiked = isPostLiked;
         this.createdDate = createdDate.toLocalDate();
+        this.hashTags = hashTags;
     }
 }
