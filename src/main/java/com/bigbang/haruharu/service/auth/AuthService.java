@@ -1,7 +1,10 @@
 package com.bigbang.haruharu.service.auth;
 
 import com.bigbang.haruharu.advice.assertThat.DefaultAssert;
+import com.bigbang.haruharu.advice.error.DefaultException;
+import com.bigbang.haruharu.advice.payload.ErrorCode;
 import com.bigbang.haruharu.config.security.token.UserPrincipal;
+import com.bigbang.haruharu.domain.entity.base.BaseEntity;
 import com.bigbang.haruharu.domain.entity.user.Provider;
 import com.bigbang.haruharu.domain.entity.user.Role;
 import com.bigbang.haruharu.domain.entity.user.Token;
@@ -200,6 +203,25 @@ public class AuthService {
         DefaultAssert.isTrue(token.get().getUserEmail().equals(authentication.getName()), "사용자 인증에 실패하였습니다.");
 
         return true;
+    }
+
+    public ResponseEntity<?> updateNickname(UserPrincipal userPrincipal, String toUpdateNickname){
+
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(
+                        () -> new DefaultException(ErrorCode.INVALID_AUTHENTICATION)
+                );
+
+        Boolean existNickname = userRepository.existsUserByNicknameAndDeleteYn(toUpdateNickname, BaseEntity.YN.N);
+        if(existNickname) {
+            throw new DefaultException(ErrorCode.EXIST_NICKNAME);
+        }
+        user.updateNickname(toUpdateNickname);
+        userRepository.save(user);
+
+        ApiResponse apiResponse = ApiResponse.builder().check(true).information(Message.builder().message("닉네임 변경 완료하였습니다.").build()).build();
+
+        return ResponseEntity.ok(apiResponse);
     }
 
 

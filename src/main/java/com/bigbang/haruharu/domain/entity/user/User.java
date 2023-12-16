@@ -26,6 +26,7 @@ public class User extends BaseEntity {
     private String email;
 
     private String imageUrl;
+    private String nickname;
 
     @Column(nullable = false)
     private Boolean emailVerified = false;
@@ -69,5 +70,8 @@ public class User extends BaseEntity {
         return this.dailyCount > 1
                 ? true
                 : false;
+    }
+    public void updateNickname(String toUpdateNickname){
+        this.nickname = toUpdateNickname;
     }
 }

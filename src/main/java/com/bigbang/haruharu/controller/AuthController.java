@@ -127,4 +127,19 @@ public class AuthController {
     ) {
         return authService.signout(tokenRefreshRequest);
     }
+
+    @Operation(summary = "닉네임 수정", description = "닉네임 수정을 수행합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "닉네임 수정 성공", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class) ) } ),
+        @ApiResponse(responseCode = "400", description = "닉네임 수정 실패", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class) ) } ),
+    })
+    @PutMapping(value="/nickname")
+    public ResponseEntity<?> updateNickname(
+        @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
+        @Parameter(description = "변경할 닉네임을 입력해주세요.", required = true) @Valid @RequestParam String toUpdateNickname
+    ) {
+        return authService.updateNickname(userPrincipal, toUpdateNickname);
+    }
+
+
 }
