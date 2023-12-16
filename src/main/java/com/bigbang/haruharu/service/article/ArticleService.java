@@ -48,10 +48,14 @@ public class ArticleService {
             throw new DefaultException(ErrorCode.OVER_DAILYCOUNT);
         }
 
-        articleRepositorySupport.getArticleInToday(userSeq)
-                .ifPresent(
-                    a -> {throw new DefaultException(ErrorCode.EXIST_TODAY_ARTICLE);}
-                );
+        Article articleInToday = articleRepositorySupport.getArticleInToday(userSeq);
+        if(!ObjectUtils.isEmpty(articleInToday)) {
+            throw new DefaultException(ErrorCode.EXIST_TODAY_ARTICLE);
+        }
+//
+//                .ifPresent(
+//                    a -> {throw new DefaultException(ErrorCode.EXIST_TODAY_ARTICLE);}
+//                );
 
         //todo conceptId에 따른 컨셉별 callClovaApi 호출 서비스 다양화
         //todo 제목 어떻게 할건지 정해지면 호출 서비스 혹은 기입

@@ -102,14 +102,14 @@ public class ArticleRepositorySupport extends QuerydslRepositorySupport {
                 .where(article.deleteYn.eq(BaseEntity.YN.N))
                 .fetch();
     }
-    public Optional<Article> getArticleInToday(Long userSeq) {
+    public Article getArticleInToday(Long userSeq) {
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();
         LocalDateTime todayEnd = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
 
-        return Optional.of(queryFactory.selectFrom(article)
+        return queryFactory.selectFrom(article)
                 .where(article.userSeq.eq(userSeq),
                         article.deleteYn.eq(BaseEntity.YN.N),
                         article.createdDate.between(todayStart, todayEnd)
-                ).fetchFirst());
+                ).fetchFirst();
     }
 }
