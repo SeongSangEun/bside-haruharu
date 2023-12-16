@@ -84,10 +84,10 @@ springdoc:
     supportedSubmitMethods: ["get", "put", "post"]
 
 clova:
-  url: https://clovastudio.apigw.ntruss.com/testapp/v1/completions/LK-D2
-  X-NCP-CLOVASTUDIO-API-KEY: NTA0MjU2MWZlZTcxNDJiY/75LnD6uPTWDKgAOALQt47E1SAtQmB8rNhS6hzitV1I0PZgeTCmcygvUkD2fZ8i3BTHyGEeUOumNTeyhnx6pK4Od2HbGCxIFUrSAUF2sKAk6iO7ObdqAsjXfAq+doUX60LJ+2t0ZUjAK72nyQgalG0Kbp9n33FNxNEoiheZj5p/OXHgkf0uIKERSJIqOm7g9phHJ6gJUivTFpJbrXYVupg=
+  url: https://clovastudio.stream.ntruss.com/testapp/v1/chat-completions/HCX-002
+  X-NCP-CLOVASTUDIO-API-KEY: NTA0MjU2MWZlZTcxNDJiY0Q+agAvO7ThcA564J17RAlpshebZTIhRYsVc/gX0I/uBNPkpPCgM8wJqKiESW6zvD6649SY1Yk8i9Smma0VqlNQnexUAmD9WKSs4x/FT+dyFg1uhzw7op3k/b/iIn/NIdkQLxRgClvARgus73DWEC+yKJKVp1dFxpl5sxyNsEnLH8nxtRDRg5ohdiUg2hy8GbHYa8SwWW4OawhaqWVqyVI=
   X-NCP-APIGW-API-KEY: IHQD7VJfELEyMar7N2Q3Lk29CvgDcQBtLabO87bM
-  X-NCP-CLOVASTUDIO-REQUEST-ID: 4935e5409f3c4d8ba5678a3ee308578b
+  X-NCP-CLOVASTUDIO-REQUEST-ID: cb9f86056ca14f8d9e2924cadd6e4507
 
 cloud:
   ncp:

@@ -1,5 +1,6 @@
 package com.bigbang.haruharu.dto.response.clova;
 
+import com.bigbang.haruharu.dto.request.clova.ClovaChatDto;
 import lombok.Getter;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class ResultResponseDto {
     private List<String> outputTokens;
     private List<AiFilter> aiFilter;
     private Boolean ok;
+    private ClovaChatDto message;
 
     @Getter
     public static class AiFilter {

@@ -24,7 +24,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,8 +55,10 @@ public class ArticleService {
 
         //todo conceptId에 따른 컨셉별 callClovaApi 호출 서비스 다양화
         //todo 제목 어떻게 할건지 정해지면 호출 서비스 혹은 기입
-        String convertedText = clovaApiService.callClovaApi(createArticleRequest.getInputMessage());
-        String subject = clovaApiService.callClovaApi(createArticleRequest.getInputMessage());
+        // 제목말하기 컨셉 임의 추가 및 시퀀스 지정
+        String convertedText = clovaApiService.convertTextApi(createArticleRequest.getConceptSeq(), createArticleRequest.getInputMessage());
+        String subject = clovaApiService.convertSubjectApi(createArticleRequest.getInputMessage());
+        String hashTag = clovaApiService.convertHashTagsApi(createArticleRequest.getInputMessage());
 
         Article article = Article.builder()
                 .userSeq(userSeq)
@@ -65,7 +66,7 @@ public class ArticleService {
                 .originText(createArticleRequest.getInputMessage())
                 .convertedText(convertedText)
                 .imageUrl(createArticleRequest.getImageUrl())
-                .hashTagSet("")
+                .hashTagSet(hashTag)
                 .likeCount(0)
                 .conceptSeq(createArticleRequest.getConceptSeq())
                 .build();

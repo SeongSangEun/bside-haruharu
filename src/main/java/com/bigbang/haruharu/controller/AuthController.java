@@ -38,8 +38,6 @@ public class AuthController {
 
     private final AuthService authService;
     private final ClovaApiService clovaApiService;
-    private final JsonUtils jsonUtils;
-    private final UploadService uploadService;
 
     @Operation(summary = "유저 정보 확인", description = "현제 접속된 유저정보를 확인합니다.")
     @ApiResponses(value = {
@@ -140,6 +138,9 @@ public class AuthController {
     ) {
         return authService.updateNickname(userPrincipal, toUpdateNickname);
     }
+    @GetMapping(value="/test")
+    public String clovaTest() {
 
-
+        return clovaApiService.clovaTest();
+    }
 }
