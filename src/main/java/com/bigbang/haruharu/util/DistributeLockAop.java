@@ -23,6 +23,7 @@ public class DistributeLockAop {
 
     private final RedissonClient redissonClient;
     private final AopForTransaction aopForTransaction;
+    public static String CREATE_ARTICLE_FAIL_MESSAGE ;
 
     @Around("@annotation(com.bigbang.haruharu.util.DistributeLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
@@ -42,7 +43,10 @@ public class DistributeLockAop {
             log.info(String.valueOf(available));
             log.info("get lock success {}" , key);
             return aopForTransaction.proceed(joinPoint);    // (5)@DistributeLock이 선언된 메소드의 로직 수행(별도 트랜잭션으로 분리)
+        } catch(DefaultException e) {
+            CREATE_ARTICLE_FAIL_MESSAGE = e.getMessage();
         } catch (Exception e) {
+            CREATE_ARTICLE_FAIL_MESSAGE = e.getMessage();
             e.printStackTrace();
             log.debug(e.getMessage());
             Thread.currentThread().interrupt();
@@ -51,5 +55,6 @@ public class DistributeLockAop {
             log.info("unlock time {}" , key);
             rLock.unlock();    // (6)종료 혹은 예외 발생시 finally에서 Lock을 해제함
         }
+        return null;
     }
 }

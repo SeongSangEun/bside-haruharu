@@ -32,7 +32,7 @@ public class ApiControllerAdvice {
                 .clazz(e.getMethod())
                 .message(e.getMessage())
                 .build();
-        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();        
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response.getMessage()).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -48,7 +48,7 @@ public class ApiControllerAdvice {
                 .fieldErrors(e.getFieldErrors())
                 .build();
 
-        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();        
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response.getMessage()).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -63,7 +63,7 @@ public class ApiControllerAdvice {
                 .fieldErrors(e.getFieldErrors())
                 .build();
         
-        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response.getMessage()).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -76,10 +76,10 @@ public class ApiControllerAdvice {
                 .builder()
                 .status(errorCode.getStatus())
                 .code(errorCode.getCode())
-                .message(e.toString())
+                .message(errorCode.getMessage())
                 .build();
         
-        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();        
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response.getMessage()).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.resolve(errorCode.getStatus()));
     }
 
@@ -91,7 +91,7 @@ public class ApiControllerAdvice {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(e.toString())
                 .build();
-        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response.getMessage()).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -103,7 +103,7 @@ public class ApiControllerAdvice {
                 .status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.value())
                 .message(e.getMessage())
                 .build();
-        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response.getMessage()).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -114,7 +114,7 @@ public class ApiControllerAdvice {
                 .status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.value())
                 .message(e.getMessage())
                 .build();
-        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response.getMessage()).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -127,7 +127,7 @@ public class ApiControllerAdvice {
                 .message(e.getMessage())
                 .build();
 
-        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response.getMessage()).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

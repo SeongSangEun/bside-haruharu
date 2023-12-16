@@ -35,7 +35,6 @@ public class ArticleService {
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
 
-    @DistributeLock(key = "#key", waitTime = 60L, leaseTime = 55L)
     public ResponseEntity<?> createArticle(String key, CreateArticleRequest createArticleRequest, Long userSeq) {
 
         //1. 오늘 쓴 글이 이미 작성되어있는지 확인 -> 있으면 하루에 글 작성은 1개 (삭제 후 재 생성 가능)

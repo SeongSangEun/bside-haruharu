@@ -4,6 +4,7 @@ import com.bigbang.haruharu.config.security.token.CurrentUser;
 import com.bigbang.haruharu.config.security.token.UserPrincipal;
 import com.bigbang.haruharu.dto.request.article.CreateArticleRequest;
 import com.bigbang.haruharu.dto.request.auth.ChangePasswordRequest;
+import com.bigbang.haruharu.dto.response.ApiResponse;
 import com.bigbang.haruharu.service.article.ArticleService;
 import com.bigbang.haruharu.service.article.ConceptService;
 import com.bigbang.haruharu.service.s3.UploadService;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+
+import static com.bigbang.haruharu.util.DistributeLockAop.CREATE_ARTICLE_FAIL_MESSAGE;
 
 @RestController
 @RequestMapping("/article")
