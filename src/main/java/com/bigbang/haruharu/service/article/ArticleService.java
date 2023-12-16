@@ -24,6 +24,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,11 +35,24 @@ public class ArticleService {
     private final ArticleRepositorySupport articleRepositorySupport;
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
-    public ResponseEntity<?> createArticle(CreateArticleRequest createArticleRequest, Long userSeq) {
 
-        //todo dailyCount에 따른 생성횟수 제한
-        //todo 하루 글 생성갯수 제한 -> 이미 가지고 있는 글이 있다면 등록안되게끔
+    @DistributeLock(key = "#key", waitTime = 60L, leaseTime = 55L)
+    public ResponseEntity<?> createArticle(String key, CreateArticleRequest createArticleRequest, Long userSeq) {
 
+        //1. 오늘 쓴 글이 이미 작성되어있는지 확인 -> 있으면 하루에 글 작성은 1개 (삭제 후 재 생성 가능)
+        //2. 하루 글 생성갯수 제한 -> dailyCount가 0인 경우 글 작성 불가
+        User user1 = userRepository.findById(userSeq)
+                .orElseThrow(
+                        () -> new DefaultException(ErrorCode.INVALID_AUTHENTICATION)
+                );
+        if(!user1.canCreateArticle()) {
+            throw new DefaultException(ErrorCode.OVER_DAILYCOUNT);
+        }
+
+        articleRepositorySupport.getArticleInToday(userSeq)
+                .ifPresent(
+                    a -> {throw new DefaultException(ErrorCode.EXIST_TODAY_ARTICLE);}
+                );
 
         //todo conceptId에 따른 컨셉별 callClovaApi 호출 서비스 다양화
         //todo 제목 어떻게 할건지 정해지면 호출 서비스 혹은 기입

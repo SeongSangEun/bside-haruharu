@@ -30,7 +30,9 @@ public class ArticleController {
             @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 CreateArticleRequest 를 참고해주세요.", required = true) @Valid @RequestBody CreateArticleRequest createArticleRequest
             ) {
-        return articleService.createArticle(createArticleRequest, userPrincipal.getId());
+
+        String key = "ARTICLE_CREATE_" + userPrincipal.getId();
+        return articleService.createArticle(key, createArticleRequest, userPrincipal.getId());
     }
 
     @Operation(summary = "글 삭제", description = "글 삭제 api 입니다.")
@@ -76,7 +78,7 @@ public class ArticleController {
             @Parameter(description = "ArticleSeq를 입력해주세요.", required = true) @PathVariable(name = "articleSeq") Long articleSeq
     ) {
 
-        String key = "ARTICLE_" + articleSeq;
+        String key = "ARTICLE_LIKE_" + articleSeq;
         return articleService.changeLikeArticle(key, articleSeq, userPrincipal.getId());
     }
 

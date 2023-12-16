@@ -65,4 +65,9 @@ public class User extends BaseEntity {
     }
     public void resetDailyCount() {this.dailyCount = 5;}
     public void minusDailyCount() {this.dailyCount --;}
+    public boolean canCreateArticle() {
+        return this.dailyCount > 1
+                ? true
+                : false;
+    }
 }

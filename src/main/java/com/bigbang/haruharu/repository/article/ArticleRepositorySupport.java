@@ -14,7 +14,11 @@ import org.eclipse.jdt.internal.compiler.ast.Expression;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import static com.bigbang.haruharu.domain.entity.article.QArticle.*;
 import static com.bigbang.haruharu.domain.entity.concept.QConcept.concept;
@@ -97,5 +101,15 @@ public class ArticleRepositorySupport extends QuerydslRepositorySupport {
                 .on(like.deleteYn.eq(BaseEntity.YN.N), like.userSeq.eq(userSeq))
                 .where(article.deleteYn.eq(BaseEntity.YN.N))
                 .fetch();
+    }
+    public Optional<Article> getArticleInToday(Long userSeq) {
+        LocalDateTime todayStart = LocalDate.now().atStartOfDay();
+        LocalDateTime todayEnd = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+
+        return Optional.of(queryFactory.selectFrom(article)
+                .where(article.userSeq.eq(userSeq),
+                        article.deleteYn.eq(BaseEntity.YN.N),
+                        article.createdDate.between(todayStart, todayEnd)
+                ).fetchFirst());
     }
 }
