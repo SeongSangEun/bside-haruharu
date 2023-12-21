@@ -81,7 +81,7 @@ springdoc:
     filter: true
     operationsSorter: method
     displayRequestDuration: true
-    supportedSubmitMethods: ["get", "put", "post"]
+    supportedSubmitMethods: ["get", "put", "post", "options"]
 
 clova:
   url: https://clovastudio.stream.ntruss.com/testapp/v1/chat-completions/HCX-002
